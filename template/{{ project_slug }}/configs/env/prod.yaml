@@ -1,0 +1,6 @@
+{
+  "env": "prod",
+  "data_dir": "data/fixtures",
+  "log_level": "INFO"
+}
+

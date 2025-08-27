@@ -1,0 +1,6 @@
+# Keep directory but ignore contents
+*
+!.gitignore
+!samples/
+!fixtures/
+

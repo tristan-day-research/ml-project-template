@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "{{ project_slug }}"
+version = "0.1.0"
+description = "{{ project_name }} — ML project scaffold (Prefect, typed schemas, Copier-updatable)"
+readme = "README.md"
+requires-python = ">={{ python_version }}"
+dependencies = [
+  "pydantic>=2",
+  "pydantic-settings>=2",
+  "pandas>=2",
+  {% if use_prefect %}"prefect>=2.16",{% endif %}
+  {% if use_pandera %}"pandera>=0.18",{% endif %}
+  {% if not env.MLCORE_LOCAL_PATH %}"ml-core[prefect] >=0.1,<0.2",{% endif %}
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy", "pre-commit"]
+
+[tool.uv]
+index-strategy = "unsafe-best-match"
+
+{% if env.MLCORE_LOCAL_PATH %}
+[tool.uv.sources]
+ml-core = { path = "{{ env.MLCORE_LOCAL_PATH }}", editable = true }
+{% endif %}
+

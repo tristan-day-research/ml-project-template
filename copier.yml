@@ -1,0 +1,42 @@
+_min_copier_version: "9.2.0"
+_subdirectory: template
+_answers_file: .copier-answers.yml
+
+project_name:
+  type: str
+  help: Human-readable project name
+
+project_slug:
+  type: str
+  default: "{{ project_name|lower|replace(' ', '-') }}"
+
+package_name:
+  type: str
+  default: "{{ project_slug|replace('-', '_') }}"
+
+python_version:
+  type: str
+  default: "3.11"
+
+use_prefect:
+  type: bool
+  default: true
+
+use_pandera:
+  type: bool
+  default: false
+
+use_dvc:
+  type: bool
+  default: false
+
+# Where to source ml-core from:
+# - If env MLCORE_LOCAL_PATH is set, write a path dependency/uv source
+# - Else, write a PyPI requirement string with upper bound
+ml_core_source:
+  type: str
+  default: "{{ (env.MLCORE_LOCAL_PATH or 'ml-core[prefect] >=0.1,<0.2') }}"
+
+_tasks:
+  - ["python", "scripts/post_gen.py"]
+
