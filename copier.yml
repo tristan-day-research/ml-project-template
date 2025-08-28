@@ -1,4 +1,5 @@
 _min_copier_version: "9.2.0"
+_templates_suffix: ".j2"
 _subdirectory: template
 _answers_file: .copier-answers.yml
 
@@ -31,12 +32,19 @@ use_dvc:
   default: false
 
 # Where to source ml-core from:
-# - If env MLCORE_LOCAL_PATH is set, write a path dependency/uv source
-# - Else, write a PyPI requirement string with upper bound
 ml_core_source:
   type: str
-  default: "{{ (env.MLCORE_LOCAL_PATH or 'ml-core[prefect] >=0.1,<0.2') }}"
+  default: "ml-core[prefect] >=0.1,<0.2"
+
+# --- ADD THESE NEW LINES HERE ---
+# Conditional dependency strings (empty if not used)
+# _prefect_dep: "prefect>=2.16.0"
+# _pandera_dep: "pandera>=0.18.0"
+
+# Create conditional variables for the template
+# use_prefect_dep: "{{ _prefect_dep if use_prefect else '' }}"
+# use_pandera_dep: "{{ _pandera_dep if use_pandera else '' }}"
+# --- END OF NEW LINES ---
 
 _tasks:
-  - ["python", "scripts/post_gen.py"]
-
+  - ["cd", "{{ project_slug }}", "&&", "python3", "scripts/post_gen.py"]
