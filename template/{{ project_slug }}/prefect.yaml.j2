@@ -1,11 +1,10 @@
 version: 2.0
 deployments:
   - name: train-eval-local
-    entrypoint: "src/{{ package_name }}/flows/train_eval.py:train_eval_flow"
+entrypoint: "src/{{ package_name }}/flows/train_eval.py:train_eval_flow"
     parameters:
       config_path: "configs/data_sources.yaml"
     work_pool:
       name: local
       type: process
       queues: [default]
-

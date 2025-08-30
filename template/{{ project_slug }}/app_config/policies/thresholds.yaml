@@ -1,0 +1,6 @@
+validation:
+  min_rows: 10
+  max_missing: 0.05
+rag:
+  chunk_tokens: 512
+

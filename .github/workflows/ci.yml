@@ -38,7 +38,7 @@ jobs:
           pip install copier uv
       - name: Generate sample project with Copier
         env:
-          MLCORE_LOCAL_PATH: ci/dummy-ml-core
+          MLCORE_LOCAL_PATH: ci/dummy-mlcore
         run: |
           mkdir -p .sandbox
           copier copy --defaults \
@@ -51,7 +51,7 @@ jobs:
         working-directory: ./.sandbox/sample
         env:
           UV_SYSTEM_PYTHON: "1"
-          MLCORE_LOCAL_PATH: "${{ github.workspace }}/ci/dummy-ml-core"
+          MLCORE_LOCAL_PATH: "${{ github.workspace }}/ci/dummy-mlcore"
         run: |
           uv pip install -e .
           uv pip install pytest

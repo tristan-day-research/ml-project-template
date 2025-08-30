@@ -9,10 +9,15 @@ description = "{{ project_name }} — ML project scaffold (Prefect, typed schema
 readme = "README.md"
 requires-python = ">={{ python_version }}"
 dependencies = [
+{% set base_deps = [
   "pydantic>=2",
   "pydantic-settings>=2",
   "pandas>=2.0.0",
-  "{{ ml_core_source }}"
+  "pyyaml>=6"
+] %}
+{% set deps = base_deps + ([ ml_core_source ] if ml_core_source else []) %}
+{% for dep in deps %}  "{{ dep }}"{% if not loop.last %},{% endif %}
+{% endfor %}
 ]
 
 [project.optional-dependencies]

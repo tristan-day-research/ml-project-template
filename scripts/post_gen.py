@@ -19,7 +19,7 @@ def update_pyproject_with_conditional_deps():
 
     - Add conditional dependencies (prefect/pandera) based on Copier answers.
     - If environment variable MLCORE_LOCAL_PATH is set, add a local
-      uv source for ml-core: `[tool.uv.sources] ml-core = { path = ..., editable = true }`.
+      uv source for mlcore: `[tool.uv.sources] mlcore = { path = ..., editable = true }`.
     """
     try:
         project_dir = Path.cwd()
@@ -55,16 +55,16 @@ def update_pyproject_with_conditional_deps():
                 # Update the dependencies
                 data['project']['dependencies'] = dependencies
                 
-        # Optionally wire local ml-core for both uv and pip
+        # Optionally wire local mlcore for both uv and pip
         mlcore_local = os.getenv("MLCORE_LOCAL_PATH")
         if mlcore_local:
             # uv: add local source mapping (used by `uv sync`)
             tool = data.setdefault("tool", {})
             uv = tool.setdefault("uv", {})
             sources = uv.setdefault("sources", {})
-            sources["ml-core"] = {"path": mlcore_local, "editable": True}
+            sources["mlcore"] = {"path": mlcore_local, "editable": True}
 
-            # pip: replace any 'ml-core...' dependency with a direct path reference
+            # pip: replace any 'mlcore...' dependency with a direct path reference
             try:
                 abs_path = Path(mlcore_local)
                 if not abs_path.is_absolute():
@@ -73,21 +73,25 @@ def update_pyproject_with_conditional_deps():
 
                 deps = data.get("project", {}).get("dependencies", [])
                 new_deps: list[str] = []
-                pattern = re.compile(r"^\s*ml-core(\[[^\]]+\])?(\s*.*)?$")
+                pattern = re.compile(r"^\s*mlcore(\[[^\]]+\])?(\s*.*)?$")
                 replaced = False
                 for dep in deps:
                     if isinstance(dep, str):
                         m = pattern.match(dep)
                         if m:
                             extras = m.group(1) or ""
-                            new_deps.append(f"ml-core{extras} @ {file_ref}")
+                            new_deps.append(f"mlcore{extras} @ {file_ref}")
                             replaced = True
                             continue
                     new_deps.append(dep)
                 if replaced:
                     data.setdefault("project", {})["dependencies"] = new_deps
+                else:
+                    # If no existing mlcore dep, append a direct path reference
+                    new_deps.append(f"mlcore @ {file_ref}")
+                    data.setdefault("project", {})["dependencies"] = new_deps
             except Exception as exc:  # noqa: BLE001
-                print(f"⚠️  Could not rewrite ml-core dependency for pip: {exc}")
+                print(f"⚠️  Could not rewrite mlcore dependency for pip: {exc}")
 
         # Write back the modified pyproject.toml if we changed anything
         with open(pyproject_path, 'w') as f:

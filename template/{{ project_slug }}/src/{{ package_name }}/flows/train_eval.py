@@ -13,7 +13,7 @@ except Exception:  # pragma: no cover - allow running without prefect installed
 
 try:
     from mlcore import get_logger, read_json, ModelCard
-except Exception:  # fallback stubs if ml-core not installed
+except Exception:  # fallback stubs if mlcore not installed
     import json
     import logging
     from pathlib import Path
@@ -55,4 +55,3 @@ def train_eval_flow(config_path: str = "configs/data_sources.yaml") -> Dict[str,
 
 if __name__ == "__main__":
     print(train_eval_flow())
-

@@ -9,5 +9,4 @@ This scaffold follows a data-centric state machine with Prefect orchestration an
 Two-plane setup:
 
 - Template plane: structure, conventions, starter flows/CLI
-- Library plane (`ml-core`): reusable utilities (logging, IO, model cards). Projects pin an upper bound and can swap a local path during development.
-
+- Library plane (`mlcore`): reusable utilities (logging, IO, model cards). Projects pin an upper bound and can swap a local path during development.

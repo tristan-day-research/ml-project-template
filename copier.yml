@@ -31,10 +31,10 @@ use_dvc:
   type: bool
   default: false
 
-# Where to source ml-core from:
+# Where to source mlcore from (optional). Leave blank to omit.
 ml_core_source:
   type: str
-  default: "ml-core[prefect] >=0.1,<0.2"
+  default: ""
 
 # --- ADD THESE NEW LINES HERE ---
 # Conditional dependency strings (empty if not used)
