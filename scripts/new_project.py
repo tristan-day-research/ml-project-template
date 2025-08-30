@@ -21,6 +21,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+import re
 
 
 def run(cmd: list[str], cwd: Path | None = None, env: dict[str, str] | None = None) -> None:
@@ -253,6 +254,8 @@ def main(argv: list[str] | None = None) -> int:
         *find_copier_cmd(repo_root),
         "copy",
         "--trust",
+        # Ensure we use the latest template state, not an old git tag
+        "--vcs-ref=HEAD",
         "--data",
         f"project_name={args.name}",
         "--data",
@@ -261,6 +264,49 @@ def main(argv: list[str] | None = None) -> int:
         str(parent_dir),
     ]
     run(copier_cmd, env=env)
+
+    # Sanity check: ensure Copier actually generated an answers file and notebooks dir
+    answers_file = project_dir / ".copier-answers.yml"
+    nbs_dir = project_dir / "lab" / "notebooks"
+
+    if not answers_file.exists():
+        print(
+            "[warn] .copier-answers.yml not found in the generated project.\n"
+            "       This suggests Copier may not have run as expected (or an older Copier version was used).\n"
+            "       Verify Copier is >= 9.2: run 'copier --version'."
+        )
+
+    if not nbs_dir.exists():
+        # Attempt a best-effort local fallback render for notebooks when using the local template.
+        # This helps if Copier partially generated the project but skipped these files.
+        try:
+            if args.source == "local":
+                tpl_root = Path(args.template_path).resolve()
+                tpl_nbs_dir = tpl_root / "template" / "{{ project_slug }}" / "lab" / "notebooks"
+                if tpl_nbs_dir.exists():
+                    nbs_dir.mkdir(parents=True, exist_ok=True)
+                    pkg_name = args.name.replace("-", "_")
+                    for j2 in tpl_nbs_dir.glob("*.ipynb.j2"):
+                        target = nbs_dir / j2.name[:-3]  # strip .j2 suffix
+                        txt = j2.read_text(encoding="utf-8")
+                        # Minimal render: substitute package_name placeholder
+                        txt = re.sub(r"{{\s*package_name\s*}}", pkg_name, txt)
+                        target.write_text(txt, encoding="utf-8")
+                    print(
+                        f"[warn] Notebooks directory was missing; wrote fallback notebooks to: {nbs_dir}"
+                    )
+                else:
+                    print(
+                        "[warn] Expected template notebooks directory not found at "
+                        f"{tpl_nbs_dir} — skipping fallback render."
+                    )
+            else:
+                print(
+                    "[warn] Notebooks directory missing and template source was GitHub; "
+                    "fallback render requires a local template."
+                )
+        except Exception as exc:  # noqa: BLE001
+            print(f"[warn] Could not create fallback notebooks: {exc}")
 
     if args.skip_venv:
         print("[info] Skipping venv creation and installs (per --skip-venv)")
