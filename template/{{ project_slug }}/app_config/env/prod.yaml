@@ -1,0 +1,9 @@
+environment: prod
+logging:
+  level: INFO
+data:
+  root: /mnt/data
+pipeline:
+  num_workers: 8
+  chunk_tokens: 1024
+

@@ -1,0 +1,9 @@
+environment: dev
+logging:
+  level: INFO
+data:
+  root: data/samples
+pipeline:
+  num_workers: 4
+  chunk_tokens: 512
+

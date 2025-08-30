@@ -12,7 +12,7 @@ Scaffold generated from the `ml-project-template` (Copier). Includes typed confi
   - `pip install -e .`
 
 Notes:
-- By default, depends on `ml-core[prefect] >=0.1,<0.2`.
+- `mlcore` is optional. If provided at generation (or via env var), it's included as a dependency; otherwise this project runs without it.
 - If you set `MLCORE_LOCAL_PATH` during generation, this project uses that local path via uv sources.
 
 ## Run
@@ -40,5 +40,4 @@ See `TEMPLATE_UPDATES.md` in the template repo for ownership policy.
 ## Two-plane model
 
 - Template plane (this repo): structure, configs, example flows & CLI.
-- Library plane (`ml-core`): reusable utilities (logging, IO, model cards, etc.). This project pins an upper bound by default and supports local development via `MLCORE_LOCAL_PATH`.
-
+- Library plane (`mlcore`): reusable utilities (logging, IO, model cards, etc.). Include it if you want shared helpers; otherwise the scaffold stands alone.

@@ -1,0 +1,8 @@
+sources:
+  raw_docs:
+    path: data/raw
+    format: jsonl
+  features:
+    path: data/features
+    format: parquet
+

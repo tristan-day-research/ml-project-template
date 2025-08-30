@@ -25,5 +25,4 @@ pytest -q
 
 ## Notes
 
-- The template pins `ml-core` with an upper bound by default (`>=0.1,<0.2`) and supports a local path override (`MLCORE_LOCAL_PATH`) when generating or developing. Update your project’s dependency pins as needed.
-
+- The template pins `mlcore` with an upper bound by default (`>=0.1,<0.2`) and supports a local path override (`MLCORE_LOCAL_PATH`) when generating or developing. Update your project’s dependency pins as needed.
