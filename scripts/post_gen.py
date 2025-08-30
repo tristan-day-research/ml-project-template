@@ -73,13 +73,15 @@ def update_pyproject_with_conditional_deps():
 
                 deps = data.get("project", {}).get("dependencies", [])
                 new_deps: list[str] = []
-                pattern = re.compile(r"^\s*mlcore(\[[^\]]+\])?(\s*.*)?$")
+                # Match both 'mlcore' and 'ml-core' names with optional extras
+                pattern = re.compile(r"^\s*ml[-_]?core(\[[^\]]+\])?(\s*.*)?$", re.IGNORECASE)
                 replaced = False
                 for dep in deps:
                     if isinstance(dep, str):
                         m = pattern.match(dep)
                         if m:
                             extras = m.group(1) or ""
+                            # Normalize name to mlcore
                             new_deps.append(f"mlcore{extras} @ {file_ref}")
                             replaced = True
                             continue
