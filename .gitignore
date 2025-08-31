@@ -4,6 +4,6 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 .sandbox/
+/.bootstrap/
 dist/
 *.egg-info/
-
