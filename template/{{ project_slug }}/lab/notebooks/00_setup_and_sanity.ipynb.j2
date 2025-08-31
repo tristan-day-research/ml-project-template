@@ -12,9 +12,10 @@
    "cell_type": "code",
    "metadata": {},
    "source": [
+   "import mlcore as mlc\n",
     "from {{ package_name }}.project_config import get_settings\n",
-    "s = get_settings()\n",
-    "print({\"environment\": s.environment, \"data_root\": str(s.paths.data_root)})"
+    "settings = get_settings()\n",
+    "print({\"environment\": settings.environment, \"data_root\": str(settings.paths.data_root)})"
    ],
    "execution_count": null,
    "outputs": []
@@ -27,4 +28,3 @@
  "nbformat": 4,
  "nbformat_minor": 5
 }
-

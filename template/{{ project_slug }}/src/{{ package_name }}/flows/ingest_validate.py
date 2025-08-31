@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict
+from ..project_config import get_settings
 
 try:
     from prefect import flow, task  # type: ignore
@@ -11,8 +12,6 @@ except Exception:  # pragma: no cover
     def task(fn):  # type: ignore
         return fn
 
-
-from {{ package_name }}.project_config import get_settings
 
 
 @task

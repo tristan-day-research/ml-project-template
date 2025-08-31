@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict
+from ..project_config import get_settings  # project settings entrypoint
 
 try:
     from prefect import flow, task  # type: ignore
@@ -27,6 +28,7 @@ except Exception:  # fallback stubs if mlcore not installed
     class ModelCard(dict):  # type: ignore
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
+
 
 
 @task

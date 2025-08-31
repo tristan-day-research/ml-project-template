@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 def test_train_eval_returns_metrics():
     from {{ package_name }}.flows.train_eval import train_eval_flow
 
@@ -16,4 +17,3 @@ def test_other_flows_import():
     assert ingest_validate_flow() in (True, False)
     assert feature_build_flow() == 1
     assert deploy_flow() == "deployed"
-

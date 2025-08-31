@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from ..project_config import get_settings  # project settings entrypoint
+
 try:
     from prefect import flow, task  # type: ignore
 except Exception:  # pragma: no cover
@@ -8,6 +10,7 @@ except Exception:  # pragma: no cover
 
     def task(fn):  # type: ignore
         return fn
+
 
 
 @task
@@ -23,4 +26,3 @@ def feature_build_flow() -> int:
 
 if __name__ == "__main__":
     print(feature_build_flow())
-
