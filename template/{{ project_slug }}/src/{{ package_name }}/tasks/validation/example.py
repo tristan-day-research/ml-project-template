@@ -8,7 +8,7 @@ class Item(BaseModel):
     value: float
 
 
+
 def validate_item(payload: dict) -> Item:
     """Validate a single item dict using pydantic."""
     return Item(**payload)
-

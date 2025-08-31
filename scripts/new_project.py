@@ -202,11 +202,20 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Override shell to spawn (e.g., bash, zsh, fish, cmd, powershell).",
     )
-    parser.add_argument(
-        "--clean",
-        action="store_true",
-        help="Start the shell without sourcing user rc files (zsh -f, bash --noprofile --norc).",
-    )
+    # Clean shell flag: default to True to avoid user rc errors (e.g., broken ~/.zshrc)
+    if BoolAction:
+        parser.add_argument(
+            "--clean",
+            action=BoolAction,  # type: ignore[arg-type]
+            default=True,
+            help="Start shell without sourcing user rc files (zsh -f; bash --noprofile --norc).",
+        )
+    else:
+        parser.add_argument(
+            "--clean",
+            action="store_true",
+            help="Start the shell without sourcing user rc files (zsh -f, bash --noprofile --norc).",
+        )
 
     args = parser.parse_args(argv)
 
